@@ -22,18 +22,42 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
+#if defined(_WIN32) || defined(__VXWORKS__)
+#define EZXML_NOMMAP
+#endif
+
+#ifdef _MSC_VER
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
+#ifndef _CRT_NONSTDC_NO_WARNINGS
+#define _CRT_NONSTDC_NO_WARNINGS
+#endif
+
+#include <io.h>
+
+#define snprintf _snprintf
+#endif
+
+#include "ezxml.h"
+
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
+
+#ifdef __GNUC__
 #include <unistd.h>
+#endif
+
 #include <sys/types.h>
+
 #ifndef EZXML_NOMMAP
 #include <sys/mman.h>
-#endif // EZXML_NOMMAP
+#endif
+
 #include <sys/stat.h>
-#include "ezxml.h"
+#include <fcntl.h>
 
 #define EZXML_WS   "\t\r\n "  // whitespace
 #define EZXML_ERRL 128        // maximum error string length
